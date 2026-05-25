@@ -1,5 +1,5 @@
 [README.md](https://github.com/user-attachments/files/28226394/README.md)
-# Sistema de Turnos con Cola Enlazada — C
+# Sistema de Turnos con Cola Enlazada — C++
 
 Proyecto académico que implementa una **cola (queue)** usando nodos enlazados en C puro. Simula un sistema de turnos tipo ventanilla: los turnos se atienden en el mismo orden en que llegaron (FIFO).
 
