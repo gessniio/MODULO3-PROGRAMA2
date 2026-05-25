@@ -119,9 +119,13 @@ Selecciona una opcion: 3
 
 ## Autores
 
+## 👨‍💻 Autor
 **Marvin & Mayra** — Proyecto académico  
+**Marvin Valdez**
+Ingeniero en Sistemas, Electronica y Electromecanica | Redes | Ciberseguridad | IA
 Estructuras de Datos · C  
-
+Segundo Semestre
+---
 ---
 
 ## Licencia
