@@ -1,21 +1,36 @@
-[README.md](https://github.com/user-attachments/files/28226394/README.md)
-# Sistema de Turnos con Cola Enlazada — C++
+# 🎫 Sistema de Turnos con Cola Enlazada
 
-Proyecto académico que implementa una **cola (queue)** usando nodos enlazados en C puro. Simula un sistema de turnos tipo ventanilla: los turnos se atienden en el mismo orden en que llegaron (FIFO).
-
----
-
-## ¿Qué hace el programa?
-
-- Agrega turnos al final de la cola
-- Atiende el turno del frente (FIFO — primero en llegar, primero en salir)
-- Muestra todos los turnos pendientes
-- Libera la memoria al salir (sin leaks)
-- Valida entradas no numéricas para que el programa no se rompa
+> **Materia:** Estructura de Datos · Módulo 3 – Programa 2  
+> **Carrera:** Licenciatura en Tecnologías de la Información y Comunicación  
+> **Lenguajes:** C · C++  
+> **Paradigma:** Programación estructurada (C) + Orientada a Objetos (C++)
 
 ---
 
-## Estructura de datos
+## 📋 Descripción
+
+Implementación de una **cola (queue) con nodos enlazados dinámicamente** que simula un sistema de atención por turnos tipo ventanilla bancaria o consultorio.
+
+Los turnos se atienden en el mismo orden en que se registraron: **FIFO** (First In, First Out — primero en llegar, primero en salir). El proyecto incluye dos versiones del mismo sistema: una en **C puro** con funciones y structs, y otra en **C++** con programación orientada a objetos.
+
+---
+
+## 📁 Archivos del repositorio
+
+```
+MODULO3-PROGRAMA2/
+├── MODULO3-PROGRAMA2.C              # Versión en C (estructurada, malloc/free manual)
+├── MODULO3-PROGRAMA2.CPP            # Versión en C++ (OOP, clase ColaTurnos, RAII)
+├── PROGRAMA2.exe                    # Ejecutable compilado para Windows (MinGW)
+├── AUTENTICA_MARVIN_MAYRA_compressed.pdf   # Documento académico de respaldo
+└── README.md
+```
+
+---
+
+## ⚙️ Estructura de datos
+
+### Versión C — struct con punteros globales
 
 ```c
 struct Turno {
@@ -24,43 +39,44 @@ struct Turno {
 };
 ```
 
-La cola se maneja con dos punteros globales: `frente` y `final`. El primero apunta al nodo que se atiende próximo; el segundo es donde se encolan los nuevos turnos.
+La cola se controla con dos punteros globales: `frente` (primer turno a atender) y `final` (donde se encola el siguiente turno nuevo).
 
----
+### Versión C++ — clase encapsulada
 
-## Funciones principales
+```cpp
+class ColaTurnos {
+public:
+    ColaTurnos();           // Inicializa cola vacía
+    ~ColaTurnos();          // Destructor: libera nodos automáticamente (RAII)
 
-| Función | Qué hace |
-|---|---|
-| `agregar_turno(int)` | Crea un nodo con `malloc` y lo enlaza al final |
-| `atender_turno()` | Elimina el nodo del frente y libera su memoria |
-| `mostrar_cola()` | Recorre la lista e imprime los turnos en orden |
-| `liberar_cola()` | Limpia todos los nodos restantes al cerrar |
+    void agregar(int numero);   // Encola nuevo turno al final
+    void atender();             // Desencola y atiende el turno del frente
+    void mostrar() const;       // Muestra todos los turnos pendientes
+    bool vacia() const;         // Verifica si la cola está vacía
 
----
-
-## Cómo compilar y ejecutar
-
-Requiere cualquier compilador de C compatible con C89/C99 (`gcc`, `clang`, `cc`).
-
-```bash
-# Compilar
-gcc -o turnos turnos.c
-
-# Ejecutar
-./turnos
-```
-
-En Windows con MinGW:
-
-```bash
-gcc -o turnos.exe turnos.c
-turnos.exe
+private:
+    Turno *frente;
+    Turno *final_;
+    void liberar();             // Limpieza interna
+};
 ```
 
 ---
 
-## Menú del programa
+## 🔧 Funciones principales
+
+| Función / Método        | Descripción                                                      |
+|------------------------|------------------------------------------------------------------|
+| `agregar(int numero)`  | Crea un nodo con `new` / `malloc` y lo enlaza al final de la cola |
+| `atender()`            | Desencola el frente, imprime el turno atendido y libera memoria   |
+| `mostrar()`            | Recorre la lista e imprime todos los turnos en orden de llegada   |
+| `vacia()`              | Devuelve `true` si la cola no tiene elementos                    |
+| `liberar()` / destructor | Libera todos los nodos restantes al cerrar el programa          |
+| `leerEntero(int &val)` | Valida entradas no numéricas y limpia el buffer de `cin`         |
+
+---
+
+## 🖥️ Menú del programa
 
 ```
 =========================================
@@ -72,6 +88,8 @@ turnos.exe
   2. Atender turno
   3. Mostrar cola de turnos
   0. Salir
+
+Selecciona una opcion:
 ```
 
 ### Ejemplo de sesión
@@ -93,41 +111,92 @@ Selecciona una opcion: 2
 
 Selecciona una opcion: 3
   Turnos en espera (orden de atención): [102]
+
+Selecciona una opcion: 0
+  Cerrando el sistema. Hasta luego.
 ```
 
 ---
 
-## Organización del repositorio
+## 🚀 Compilar y ejecutar
 
+### Linux / macOS
+
+```bash
+# Versión C
+gcc -o turnos MODULO3-PROGRAMA2.C
+./turnos
+
+# Versión C++
+g++ -std=c++17 -o turnos MODULO3-PROGRAMA2.CPP
+./turnos
 ```
-.
-└── turnos.c      # Código fuente completo
-└── README.md
+
+### Windows (MinGW / MSYS2)
+
+```bash
+# Versión C
+gcc -o turnos.exe MODULO3-PROGRAMA2.C
+turnos.exe
+
+# Versión C++
+g++ -std=c++17 -o turnos.exe MODULO3-PROGRAMA2.CPP
+turnos.exe
 ```
 
+> También puedes ejecutar directamente el archivo `PROGRAMA2.exe` incluido (compilado para Windows 64-bit con MinGW).
+
+### Requisitos
+
+| Herramienta | Versión mínima |
+|-------------|---------------|
+| gcc / g++   | 7.x o superior |
+| Estándar C  | C89 / C99      |
+| Estándar C++ | C++11 o superior |
+
 ---
 
-## Conceptos aplicados
+## 🧠 Conceptos aplicados
 
-- Colas con nodos enlazados (linked list queue)
-- Gestión dinámica de memoria: `malloc` / `free`
-- Manejo de punteros dobles (`frente` y `final`)
-- Validación de entrada con `scanf` y limpieza de buffer
-- Separación en funciones para mantener el código legible
+- **Cola enlazada dinámica (Linked List Queue)** — estructura FIFO con nodos en heap
+- **Gestión dinámica de memoria** — `malloc` / `free` (C) y `new` / `delete` (C++)
+- **Encapsulamiento OOP** — clase `ColaTurnos` con atributos privados y métodos públicos
+- **RAII** *(Resource Acquisition Is Initialization)* — destructor libera memoria automáticamente
+- **Manejo de punteros dobles** — `frente` y `final_` para encolado/desencolado O(1)
+- **Validación de entrada** — `scanf` con limpieza de buffer (C) y `cin` con `numeric_limits` (C++)
+- **Separación de responsabilidades** — funciones/métodos con una sola responsabilidad cada uno
 
 ---
 
-## Autores
+## 📊 Comparativa de versiones
 
-## 👨‍💻 Autor
-**Marvin & Mayra** — Proyecto académico  
-**Marvin Valdez**
-Ingeniero en Sistemas, Electronica y Electromecanica | Redes | Ciberseguridad | IA
-Estructuras de Datos · C  
-Segundo Semestre
----
+| Característica             | C (`MODULO3-PROGRAMA2.C`)      | C++ (`MODULO3-PROGRAMA2.CPP`) |
+|---------------------------|-------------------------------|-------------------------------|
+| Paradigma                 | Estructurado                  | Orientado a objetos           |
+| Memoria                   | `malloc` / `free` manual      | `new` / `delete` con RAII     |
+| Encapsulamiento           | Variables globales            | Clase `ColaTurnos` privada    |
+| Liberación al salir       | `liberar_cola()` explícita    | Destructor automático         |
+| Validación de entrada     | `scanf` + limpieza de buffer  | `cin` + `numeric_limits`      |
+| Constructor del nodo      | `malloc` + asignación manual  | `explicit Turno(int n)`       |
+
 ---
 
-## Licencia
+## 📄 Documento académico
+
+El archivo **`AUTENTICA_MARVIN_MAYRA_compressed.pdf`** contiene la documentación formal del proyecto: análisis del problema, diseño de la solución, diagramas de flujo y conclusiones académicas, elaborado bajo los lineamientos de la materia Estructura de Datos.
+
+---
+
+## 👨‍💻 Autores
+
+**Marvin Valdez** · [@gessniio](https://github.com/gessniio)  
+Ingeniero en Sistemas, Electrónica y Electromecánica | Redes · Ciberseguridad · IA  
+*Estructura de Datos — Segundo Semestre*
+
+**Mayra** — Colaboradora académica del proyecto
+
+---
+
+## 📜 Licencia
 
 Uso académico. Sin restricciones para fines educativos.
